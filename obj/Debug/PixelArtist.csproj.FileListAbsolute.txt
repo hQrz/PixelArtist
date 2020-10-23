@@ -1,0 +1,9 @@
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\bin\Debug\PixelArtist.exe.config
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\bin\Debug\PixelArtist.exe
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\bin\Debug\PixelArtist.pdb
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\obj\Debug\PixelArtist.csprojResolveAssemblyReference.cache
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\obj\Debug\PixelArtist.MainForm.resources
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\obj\Debug\PixelArtist.Properties.Resources.resources
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\obj\Debug\PixelArtist.csproj.GenerateResource.Cache
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\obj\Debug\PixelArtist.exe
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\obj\Debug\PixelArtist.pdb
