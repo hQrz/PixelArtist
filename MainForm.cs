@@ -209,26 +209,29 @@ namespace PixelArtist {
             }
             for (int h = 0; h < newbitmap.Height; h += RIDIO) {
                 for (int w = 0; w < newbitmap.Width; w += RIDIO) {
-                    int avgRed = 0, avgGreen = 0, avgBlue = 0, avgAlpha = 0;
-                    int count = 0;
                     //取周围的像素
+                    Dictionary<Color, int> electer = new Dictionary<Color, int>();
                     for (int x = w; (x < w + RIDIO && x < newbitmap.Width); x++) {
                         for (int y = h; (y < h + RIDIO && y < newbitmap.Height); y++) {
                             Color pixel = newbitmap.GetPixel(x, y);
-                            avgRed += pixel.R;
-                            avgGreen += pixel.G;
-                            avgBlue += pixel.B;
-                            avgAlpha += pixel.A;
-                            count++;
+                            if (electer.ContainsKey(pixel)) {
+                                electer[pixel]++;
+                            } else {
+                                electer.Add(pixel, 0);
+                            }
                         }
                     }
-                    //取平均值
-                    avgRed = avgRed / count;
-                    avgBlue = avgBlue / count;
-                    avgGreen = avgGreen / count;
-                    avgAlpha = avgAlpha / count;
+                    int max_value = electer.Values.Max();
+                    List<Color> max_color = electer.Where(x => x.Value == max_value).Select(p => p.Key).ToList<Color>();
+                    int avgRed = 0, avgGreen = 0, avgBlue = 0, avgAlpha = 0;
+                    foreach(Color c in max_color) {
+                        avgAlpha += c.A;
+                        avgRed += c.R;
+                        avgGreen += c.G;
+                        avgBlue += c.B;
+                    }
                     //设置颜色
-                    Color newColor = Color.FromArgb(avgAlpha, avgRed, avgGreen, avgBlue);
+                    Color newColor = Color.FromArgb(avgAlpha/max_color.Count, avgRed / max_color.Count, avgGreen / max_color.Count, avgBlue / max_color.Count);
                     double min_distance = Convert.ToDouble(nud_color_threshold.Value);
                     Color min_color = newColor;
                     if (color_board != null) {

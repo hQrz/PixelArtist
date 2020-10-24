@@ -6,3 +6,4 @@ D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\bin\Release\PixelArtist.ex
 D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\bin\Release\PixelArtist.pdb
 D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\obj\Release\PixelArtist.exe
 D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\obj\Release\PixelArtist.pdb
+D:\MyCodes\VS2015\PixelArtist\PixelArtist\PixelArtist\obj\Release\PixelArtist.csprojResolveAssemblyReference.cache
