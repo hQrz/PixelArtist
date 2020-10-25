@@ -199,7 +199,58 @@ namespace PixelArtist {
             pbar.Value = 100;
             bt_to_pixel.Enabled = true;
         }
-        //转换到像素图
+        //-----------------转换到像素图------------------------
+        private Color GetRangePixelColor(ref Bitmap bmp,int from_w,int from_h,int RIDIO) {
+            return pcf(ref bmp,from_w,from_h,RIDIO);
+        }
+        private delegate Color PixelColorFunc(ref Bitmap bmp, int from_w, int from_h, int RIDIO);
+        //取范围内平均颜色
+        private static Color AvgRangePixelColor(ref Bitmap bmp, int from_w, int from_h, int RIDIO) {
+            int avgRed = 0, avgGreen = 0, avgBlue = 0, avgAlpha = 0,count = 0;
+            for (int x = from_w; (x < from_w + RIDIO && x < bmp.Width); x++) {
+                for (int y = from_h; (y < from_h + RIDIO && y < bmp.Height); y++) {
+                    Color c = bmp.GetPixel(x, y);
+                    avgAlpha += c.A;
+                    avgRed += c.R;
+                    avgGreen += c.G;
+                    avgBlue += c.B;
+                    count++;
+                }
+            }
+            return Color.FromArgb(avgAlpha / count, avgRed / count, avgGreen / count, avgBlue / count);
+        }
+        //取范围内像素占比最多的颜色
+        private static Color MostRangePixelColor(ref Bitmap bmp, int from_w, int from_h, int RIDIO) {
+            Dictionary<Color, int> electer = new Dictionary<Color, int>();
+            for (int x = from_w; (x < from_w + RIDIO && x < bmp.Width); x++) {
+                for (int y = from_h; (y < from_h + RIDIO && y < bmp.Height); y++) {
+                    Color pixel = bmp.GetPixel(x, y);
+                    if (electer.ContainsKey(pixel)) {
+                        electer[pixel]++;
+                    } else {
+                        electer.Add(pixel, 0);
+                    }
+                }
+            }
+            int max_value = electer.Values.Max();
+            List<Color> max_color = electer.Where(x => x.Value == max_value).Select(p => p.Key).ToList<Color>();
+            int avgRed = 0, avgGreen = 0, avgBlue = 0, avgAlpha = 0;
+            foreach (Color c in max_color) {
+                avgAlpha += c.A;
+                avgRed += c.R;
+                avgGreen += c.G;
+                avgBlue += c.B;
+            }
+            return Color.FromArgb(avgAlpha / max_color.Count, avgRed / max_color.Count, avgGreen / max_color.Count, avgBlue / max_color.Count);
+        }
+        private PixelColorFunc pcf = MostRangePixelColor;
+        private void rb_convert_avg_CheckedChanged(object sender, EventArgs e) {
+            pcf = AvgRangePixelColor;
+        }
+        private void rb_convert_most_CheckedChanged(object sender, EventArgs e) {
+            pcf = MostRangePixelColor;
+        }
+        //转换到像素图主过程
         private void source_to_pixel(object parameter) {
             int RIDIO = (int)parameter;
             Bitmap newbitmap = source.Clone() as Bitmap;
@@ -209,29 +260,8 @@ namespace PixelArtist {
             }
             for (int h = 0; h < newbitmap.Height; h += RIDIO) {
                 for (int w = 0; w < newbitmap.Width; w += RIDIO) {
-                    //取周围的像素
-                    Dictionary<Color, int> electer = new Dictionary<Color, int>();
-                    for (int x = w; (x < w + RIDIO && x < newbitmap.Width); x++) {
-                        for (int y = h; (y < h + RIDIO && y < newbitmap.Height); y++) {
-                            Color pixel = newbitmap.GetPixel(x, y);
-                            if (electer.ContainsKey(pixel)) {
-                                electer[pixel]++;
-                            } else {
-                                electer.Add(pixel, 0);
-                            }
-                        }
-                    }
-                    int max_value = electer.Values.Max();
-                    List<Color> max_color = electer.Where(x => x.Value == max_value).Select(p => p.Key).ToList<Color>();
-                    int avgRed = 0, avgGreen = 0, avgBlue = 0, avgAlpha = 0;
-                    foreach(Color c in max_color) {
-                        avgAlpha += c.A;
-                        avgRed += c.R;
-                        avgGreen += c.G;
-                        avgBlue += c.B;
-                    }
                     //设置颜色
-                    Color newColor = Color.FromArgb(avgAlpha/max_color.Count, avgRed / max_color.Count, avgGreen / max_color.Count, avgBlue / max_color.Count);
+                    Color newColor = GetRangePixelColor(ref newbitmap, w, h, RIDIO);
                     double min_distance = Convert.ToDouble(nud_color_threshold.Value);
                     Color min_color = newColor;
                     if (color_board != null) {
@@ -475,7 +505,6 @@ namespace PixelArtist {
                 reload_color_board(ref new_color_list);
             }
         }
-
         //--------------------------------------
     }
 }
