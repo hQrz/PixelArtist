@@ -15,6 +15,7 @@ namespace PixelArtist {
         private Bitmap source;
         private Dictionary<Button, Color> ColorBoard = new Dictionary<Button, Color>();//当前画板中的颜色集合
         private Dictionary<Button, Color> CollectColor = new Dictionary<Button, Color>();//收藏的颜色
+        private bool isGetColorMode = false;
         private int optimization_index = 5;
         public MainForm() {
             InitializeComponent();
@@ -178,6 +179,10 @@ namespace PixelArtist {
             double b = c1.B - c2.B;
             return ((2 + rmean / 256) * (r * r) + 4 * g * g + (2 + (255 - rmean) / 256) * (b * b));
         }
+        public static double LAB_EUC_distance(Color c1,Color c2) {
+            Lab24 lab1 = UnmanagedImageConverter.ToLab24(c1), lab2 = UnmanagedImageConverter.ToLab24(c2);
+            return (lab1.L-lab2.L) * (lab1.L - lab2.L) + (lab1.A - lab2.A) * (lab1.A - lab2.A) + (lab1.B - lab2.B) * (lab1.B - lab2.B);
+        }
         public DistanceFunc func_ = CIEDE2000_distance;
         // -------------选择颜色相似度算法-------------
         private void rb_LAB_CheckedChanged(object sender, EventArgs e) {
@@ -190,6 +195,9 @@ namespace PixelArtist {
 
         private void rb_CIEDE2000_CheckedChanged(object sender, EventArgs e) {
             func_ = CIEDE2000_distance;
+        }
+        private void rb_LAB_EUC_CheckedChanged(object sender, EventArgs e) {
+            func_ = LAB_EUC_distance;
         }
         // --------------------------------------------------
 
@@ -402,20 +410,34 @@ namespace PixelArtist {
                 if (c1.value.L < c2.value.L)
                     return 1;
                 else if (c1.value.L == c2.value.L) {
-                    double ag = Angle(c1.value.A, c1.value.B, c2.value.A, c2.value.B);
-                    if (ag > 0)
+                    int diff = c1.value.A * c1.value.A + c1.value.B * c1.value.B - c2.value.A * c2.value.A - c2.value.B * c2.value.B;
+                    if (diff > 0)
                         return 1;
-                    else if (ag < 0)
+                    else if (diff < 0)
                         return -1;
                     else {
-                        int diff = c1.value.A - c2.value.A;//角度相等，坐标越大 => 长度越大
-                        if (diff < 0)
+                        double ag = Angle(c1.value.A, c1.value.B, c2.value.A, c2.value.B);
+                        if (ag > 0)
                             return 1;
-                        else if (diff > 0)
+                        else if (ag < 0)
                             return -1;
                         else
                             return 0;
                     }
+                    //double ag = Angle(c1.value.A, c1.value.B, c2.value.A, c2.value.B);
+                    //if (ag > 0)
+                    //    return 1;
+                    //else if (ag < 0)
+                    //    return -1;
+                    //else {
+                    //    int diff = c1.value.A - c2.value.A;//角度相等，坐标越大 => 长度越大
+                    //    if (diff < 0)
+                    //        return 1;
+                    //    else if (diff > 0)
+                    //        return -1;
+                    //    else
+                    //        return 0;
+                    //}
                 } else {
                     return -1;
                 }
@@ -449,6 +471,7 @@ namespace PixelArtist {
                         }
                     }
                 }
+                //List<Color> color_list = pb_result.Image.Palette.Entries.ToList<Color>();
                 if (color_list.Count > 2000) {
                     DialogResult dr = MessageBox.Show("颜色数量：" + color_list.Count.ToString() + "  较大，读取很慢，是否继续？", "提示", MessageBoxButtons.YesNo);
                     if (dr == DialogResult.No) {
@@ -505,6 +528,25 @@ namespace PixelArtist {
                 reload_color_board(ref new_color_list);
             }
         }
+
+        private void pb_result_MouseMove(object sender, MouseEventArgs e) {
+            if (isGetColorMode) {
+                
+            }
+        }
+
+        private void bt_get_color_Click(object sender, EventArgs e) {
+            isGetColorMode = true;
+        }
+
+        private void pb_result_MouseDown(object sender, MouseEventArgs e) {
+            if (isGetColorMode) {
+
+                isGetColorMode = false;
+            }
+        }
+
+
         //--------------------------------------
     }
 }

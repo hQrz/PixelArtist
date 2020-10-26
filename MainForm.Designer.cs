@@ -56,21 +56,24 @@
             this.nud_color_size = new System.Windows.Forms.NumericUpDown();
             this.tb_open_path = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.rb_LAB = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.rb_EUC = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
             this.rb_CIEDE2000 = new System.Windows.Forms.RadioButton();
+            this.label10 = new System.Windows.Forms.Label();
+            this.rb_LAB_EUC = new System.Windows.Forms.RadioButton();
             this.tt_color_count = new System.Windows.Forms.ToolTip(this.components);
             this.bt_open_root_path = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.label8 = new System.Windows.Forms.Label();
             this.rb_convert_avg = new System.Windows.Forms.RadioButton();
             this.label9 = new System.Windows.Forms.Label();
             this.rb_convert_most = new System.Windows.Forms.RadioButton();
+            this.bt_get_color = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pb_result)).BeginInit();
             this.cm_result.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_source)).BeginInit();
@@ -93,6 +96,8 @@
             this.pb_result.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pb_result.TabIndex = 0;
             this.pb_result.TabStop = false;
+            this.pb_result.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pb_result_MouseDown);
+            this.pb_result.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pb_result_MouseMove);
             // 
             // cm_result
             // 
@@ -161,7 +166,7 @@
             // 
             // bt_add_color
             // 
-            this.bt_add_color.Location = new System.Drawing.Point(716, 448);
+            this.bt_add_color.Location = new System.Drawing.Point(716, 427);
             this.bt_add_color.Name = "bt_add_color";
             this.bt_add_color.Size = new System.Drawing.Size(75, 25);
             this.bt_add_color.TabIndex = 3;
@@ -171,7 +176,7 @@
             // 
             // bt_save_color
             // 
-            this.bt_save_color.Location = new System.Drawing.Point(842, 448);
+            this.bt_save_color.Location = new System.Drawing.Point(842, 427);
             this.bt_save_color.Name = "bt_save_color";
             this.bt_save_color.Size = new System.Drawing.Size(75, 25);
             this.bt_save_color.TabIndex = 4;
@@ -188,7 +193,7 @@
             this.pl_color_board.ContextMenuStrip = this.cm_delete_all;
             this.pl_color_board.Location = new System.Drawing.Point(716, 39);
             this.pl_color_board.Name = "pl_color_board";
-            this.pl_color_board.Size = new System.Drawing.Size(201, 403);
+            this.pl_color_board.Size = new System.Drawing.Size(201, 382);
             this.pl_color_board.TabIndex = 2;
             // 
             // cm_delete_all
@@ -255,7 +260,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 10F);
-            this.label2.Location = new System.Drawing.Point(714, 504);
+            this.label2.Location = new System.Drawing.Point(714, 483);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 14);
             this.label2.TabIndex = 16;
@@ -279,7 +284,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 10F);
-            this.label1.Location = new System.Drawing.Point(714, 479);
+            this.label1.Location = new System.Drawing.Point(714, 458);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 14);
             this.label1.TabIndex = 20;
@@ -292,7 +297,7 @@
             0,
             0,
             0});
-            this.nud_color_threshold.Location = new System.Drawing.Point(790, 478);
+            this.nud_color_threshold.Location = new System.Drawing.Point(790, 457);
             this.nud_color_threshold.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -303,14 +308,14 @@
             this.nud_color_threshold.TabIndex = 5;
             this.nud_color_threshold.ThousandsSeparator = true;
             this.nud_color_threshold.Value = new decimal(new int[] {
-            5000,
+            500000,
             0,
             0,
             0});
             // 
             // nud_color_size
             // 
-            this.nud_color_size.Location = new System.Drawing.Point(790, 503);
+            this.nud_color_size.Location = new System.Drawing.Point(790, 482);
             this.nud_color_size.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -348,10 +353,21 @@
             this.flowLayoutPanel1.Controls.Add(this.rb_EUC);
             this.flowLayoutPanel1.Controls.Add(this.label5);
             this.flowLayoutPanel1.Controls.Add(this.rb_CIEDE2000);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(717, 530);
+            this.flowLayoutPanel1.Controls.Add(this.label10);
+            this.flowLayoutPanel1.Controls.Add(this.rb_LAB_EUC);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(717, 509);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 35);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 56);
             this.flowLayoutPanel1.TabIndex = 25;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(3, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(191, 12);
+            this.label6.TabIndex = 27;
+            this.label6.Text = "颜色匹配算法                    ";
             // 
             // label3
             // 
@@ -415,6 +431,27 @@
             this.rb_CIEDE2000.UseVisualStyleBackColor = true;
             this.rb_CIEDE2000.CheckedChanged += new System.EventHandler(this.rb_CIEDE2000_CheckedChanged);
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("宋体", 10F);
+            this.label10.Location = new System.Drawing.Point(3, 31);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(63, 14);
+            this.label10.TabIndex = 28;
+            this.label10.Text = "LAB-EUC ";
+            // 
+            // rb_LAB_EUC
+            // 
+            this.rb_LAB_EUC.AutoSize = true;
+            this.rb_LAB_EUC.Location = new System.Drawing.Point(72, 34);
+            this.rb_LAB_EUC.Name = "rb_LAB_EUC";
+            this.rb_LAB_EUC.Size = new System.Drawing.Size(14, 13);
+            this.rb_LAB_EUC.TabIndex = 29;
+            this.rb_LAB_EUC.TabStop = true;
+            this.rb_LAB_EUC.UseVisualStyleBackColor = true;
+            this.rb_LAB_EUC.CheckedChanged += new System.EventHandler(this.rb_LAB_EUC_CheckedChanged);
+            // 
             // tt_color_count
             // 
             this.tt_color_count.ShowAlways = true;
@@ -428,15 +465,6 @@
             this.bt_open_root_path.Text = "打开保存路径";
             this.bt_open_root_path.UseVisualStyleBackColor = true;
             this.bt_open_root_path.Click += new System.EventHandler(this.bt_open_root_path_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(191, 12);
-            this.label6.TabIndex = 27;
-            this.label6.Text = "颜色匹配算法                    ";
             // 
             // label7
             // 
@@ -502,11 +530,22 @@
             this.rb_convert_most.UseVisualStyleBackColor = true;
             this.rb_convert_most.CheckedChanged += new System.EventHandler(this.rb_convert_most_CheckedChanged);
             // 
+            // bt_get_color
+            // 
+            this.bt_get_color.Location = new System.Drawing.Point(804, 427);
+            this.bt_get_color.Name = "bt_get_color";
+            this.bt_get_color.Size = new System.Drawing.Size(25, 25);
+            this.bt_get_color.TabIndex = 30;
+            this.bt_get_color.Text = "取";
+            this.bt_get_color.UseVisualStyleBackColor = true;
+            this.bt_get_color.Click += new System.EventHandler(this.bt_get_color_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1634, 651);
+            this.Controls.Add(this.bt_get_color);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.bt_open_root_path);
             this.Controls.Add(this.flowLayoutPanel1);
@@ -591,6 +630,9 @@
         private System.Windows.Forms.RadioButton rb_convert_avg;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.RadioButton rb_convert_most;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.RadioButton rb_LAB_EUC;
+        private System.Windows.Forms.Button bt_get_color;
     }
 }
 
