@@ -38,11 +38,11 @@ namespace PixelArtist {
         //载入目录下的所有画板
         private void load_color_board() {
             cb_color_board.Items.Clear();
-            var files = Directory.GetFiles(Directory.GetCurrentDirectory(),"*.colorboard");
+            var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.colorboard");
             foreach (var file in files) {
                 string file_name = Path.GetFileName(file);
                 cb_color_board.Items.Add(file_name);
-            }  
+            }
         }
         //下拉框选择画板事件
         private void cb_color_board_SelectedIndexChanged(object sender, EventArgs e) {
@@ -64,11 +64,11 @@ namespace PixelArtist {
             }
         }
         //画板中增加一个颜色按钮
-        private void add_a_color_button(Color c,bool isCollect = false) {
+        private void add_a_color_button(Color c, bool isCollect = false) {
             Button bt_color = new Button();
             bt_color.Width = 40;
             bt_color.Height = 40;
-            if(isCollect == true) {
+            if (isCollect == true) {
                 bt_color.FlatAppearance.BorderColor = Color.Gold;
                 bt_color.FlatAppearance.BorderSize = 2;
                 bt_color.FlatStyle = FlatStyle.Flat;
@@ -107,7 +107,7 @@ namespace PixelArtist {
             ToolStripMenuItem ts = (ToolStripMenuItem)sender;
             ContextMenuStrip cm = (ContextMenuStrip)ts.Owner;
             Button bt = (Button)cm.SourceControl;
-            if(CollectColor.ContainsKey(bt) == false) {
+            if (CollectColor.ContainsKey(bt) == false) {
                 ColorBoard.Remove(bt);
                 pl_color_board.Controls.Remove(bt);
                 bt.Dispose();
@@ -154,7 +154,7 @@ namespace PixelArtist {
             dialog.Filter = "图片文件|*.jpg;*.png;*.bmp;*.jpeg|jpg文件|*.jpg|png文件|*.png|bmp文件|*.bmp";//打开多个文件
             if (dialog.ShowDialog() == DialogResult.OK) {
                 string source_path = dialog.FileName;
-                tb_save_path.Text = dialog.FileName.Substring(0,dialog.FileName.LastIndexOf(".")) + "_pixel";
+                tb_save_path.Text = dialog.FileName.Substring(0, dialog.FileName.LastIndexOf(".")) + "_pixel";
                 tb_open_path.Text = dialog.FileName;
                 source = (Bitmap)Image.FromFile(source_path);
                 pb_source.Image = source.Clone() as Image;
@@ -163,25 +163,25 @@ namespace PixelArtist {
 
         // ---------------颜色差公式 ----------------------
         public delegate double DistanceFunc(Color c1, Color c2);
-        public static double Distance(DistanceFunc df,Color c1,Color c2) {
+        public static double Distance(DistanceFunc df, Color c1, Color c2) {
             return df(c1, c2);
         }
-        public static double euc_distance(Color c1,Color c2) {
+        public static double euc_distance(Color c1, Color c2) {
             return (c1.R - c2.R) * (c1.R - c2.R) + (c1.G - c2.G) * (c1.G - c2.G) + (c1.B - c2.B) * (c1.B - c2.B) + (c1.A - c2.A) * (c1.A - c2.A);
         }
-        public static double CIEDE2000_distance(Color c1,Color c2) {
+        public static double CIEDE2000_distance(Color c1, Color c2) {
             return CIEDE2000.Delta(c1, c2);
         }
-        public static double LAB_distance(Color c1,Color c2) {
+        public static double LAB_distance(Color c1, Color c2) {
             double rmean = (c1.R + c2.R) / 2;
             double r = c1.R - c2.R;
             double g = c1.G - c2.G;
             double b = c1.B - c2.B;
             return ((2 + rmean / 256) * (r * r) + 4 * g * g + (2 + (255 - rmean) / 256) * (b * b));
         }
-        public static double LAB_EUC_distance(Color c1,Color c2) {
+        public static double LAB_EUC_distance(Color c1, Color c2) {
             Lab24 lab1 = UnmanagedImageConverter.ToLab24(c1), lab2 = UnmanagedImageConverter.ToLab24(c2);
-            return (lab1.L-lab2.L) * (lab1.L - lab2.L) + (lab1.A - lab2.A) * (lab1.A - lab2.A) + (lab1.B - lab2.B) * (lab1.B - lab2.B);
+            return (lab1.L - lab2.L) * (lab1.L - lab2.L) + (lab1.A - lab2.A) * (lab1.A - lab2.A) + (lab1.B - lab2.B) * (lab1.B - lab2.B);
         }
         public DistanceFunc func_ = CIEDE2000_distance;
         // -------------选择颜色相似度算法-------------
@@ -208,13 +208,13 @@ namespace PixelArtist {
             bt_to_pixel.Enabled = true;
         }
         //-----------------转换到像素图------------------------
-        private Color GetRangePixelColor(ref Bitmap bmp,int from_w,int from_h,int RIDIO) {
-            return pcf(ref bmp,from_w,from_h,RIDIO);
+        private Color GetRangePixelColor(ref Bitmap bmp, int from_w, int from_h, int RIDIO) {
+            return pcf(ref bmp, from_w, from_h, RIDIO);
         }
         private delegate Color PixelColorFunc(ref Bitmap bmp, int from_w, int from_h, int RIDIO);
         //取范围内平均颜色
         private static Color AvgRangePixelColor(ref Bitmap bmp, int from_w, int from_h, int RIDIO) {
-            int avgRed = 0, avgGreen = 0, avgBlue = 0, avgAlpha = 0,count = 0;
+            int avgRed = 0, avgGreen = 0, avgBlue = 0, avgAlpha = 0, count = 0;
             for (int x = from_w; (x < from_w + RIDIO && x < bmp.Width); x++) {
                 for (int y = from_h; (y < from_h + RIDIO && y < bmp.Height); y++) {
                     Color c = bmp.GetPixel(x, y);
@@ -307,7 +307,7 @@ namespace PixelArtist {
         }
         //打开保存路径
         private void bt_open_root_path_Click(object sender, EventArgs e) {
-            string v_OpenFolderPath = tb_save_path.Text.ToString().Substring(0,tb_save_path.Text.ToString().LastIndexOf("\\"));
+            string v_OpenFolderPath = tb_save_path.Text.ToString().Substring(0, tb_save_path.Text.ToString().LastIndexOf("\\"));
             System.Diagnostics.Process.Start("explorer.exe", v_OpenFolderPath);
         }
         //----------------保存像素图 按钮事件-----------------------
@@ -356,16 +356,16 @@ namespace PixelArtist {
             ColorBoard.Clear();
             List<Color> collections = CollectColor.Values.ToList<Color>();
             foreach (Color c in collections) {
-                add_a_color_button(c,true);
-            }            
+                add_a_color_button(c, true);
+            }
             update_color_board_tooltips();
         }
 
         //根据RGB计算色相Hue
         private static double Hue(Color c) {
             double hue = 0;
-            Byte max_rgb = Math.Max(Math.Max(c.R, c.G),c.B),
-                min_rgb = Math.Min(Math.Min(c.R,c.G),c.B);
+            Byte max_rgb = Math.Max(Math.Max(c.R, c.G), c.B),
+                min_rgb = Math.Min(Math.Min(c.R, c.G), c.B);
             int diff = max_rgb - min_rgb;
             if (diff != 0) {
                 if (c.R == max_rgb)
@@ -397,12 +397,12 @@ namespace PixelArtist {
             });
         }
         //角度
-        public double Angle(Byte X1,Byte Y1,Byte X2,Byte Y2) {    
-            return Math.Acos((X1*X2 + Y1*Y2)/(Math.Abs(Math.Sqrt(X1*X1 + Y1*Y1) * Math.Abs(Math.Sqrt(X2*X2 + Y2*Y2)))));
+        public double Angle(Byte X1, Byte Y1, Byte X2, Byte Y2) {
+            return Math.Acos((X1 * X2 + Y1 * Y2) / (Math.Abs(Math.Sqrt(X1 * X1 + Y1 * Y1) * Math.Abs(Math.Sqrt(X2 * X2 + Y2 * Y2)))));
         }
         //根据LAB模型排序，先看亮度L，再根据AB向量夹角大小排序，最后看AB向量长度
         private List<ColorLAB> sort_color_board_by_lab(ref List<Color> color_list) {
-            List<ColorLAB> order_list = new List<global::ColorLAB> ();
+            List<ColorLAB> order_list = new List<global::ColorLAB>();
             foreach (Color c in color_list) {
                 order_list.Add(new ColorLAB(c));
             }
@@ -410,40 +410,40 @@ namespace PixelArtist {
                 if (c1.value.L < c2.value.L)
                     return 1;
                 else if (c1.value.L == c2.value.L) {
-                    int diff = c1.value.A * c1.value.A + c1.value.B * c1.value.B - c2.value.A * c2.value.A - c2.value.B * c2.value.B;
-                    if (diff > 0)
-                        return 1;
-                    else if (diff < 0)
-                        return -1;
-                    else {
-                        double ag = Angle(c1.value.A, c1.value.B, c2.value.A, c2.value.B);
-                        if (ag > 0)
-                            return 1;
-                        else if (ag < 0)
-                            return -1;
-                        else
-                            return 0;
-                    }
-                    //double ag = Angle(c1.value.A, c1.value.B, c2.value.A, c2.value.B);
-                    //if (ag > 0)
+                    //int diff = c1.value.A * c1.value.A + c1.value.B * c1.value.B - c2.value.A * c2.value.A - c2.value.B * c2.value.B;
+                    //if (diff > 0)
                     //    return 1;
-                    //else if (ag < 0)
+                    //else if (diff < 0)
                     //    return -1;
                     //else {
-                    //    int diff = c1.value.A - c2.value.A;//角度相等，坐标越大 => 长度越大
-                    //    if (diff < 0)
+                    //    double ag = Angle(c1.value.A, c1.value.B, c2.value.A, c2.value.B);
+                    //    if (ag > 0)
                     //        return 1;
-                    //    else if (diff > 0)
+                    //    else if (ag < 0)
                     //        return -1;
                     //    else
                     //        return 0;
                     //}
+                    double ag = Angle(c1.value.A, c1.value.B, c2.value.A, c2.value.B);
+                    if (ag > 0)
+                        return 1;
+                    else if (ag < 0)
+                        return -1;
+                    else {
+                        int diff = c1.value.A - c2.value.A;//角度相等，坐标越大 => 长度越大
+                        if (diff < 0)
+                            return 1;
+                        else if (diff > 0)
+                            return -1;
+                        else
+                            return 0;
+                    }
                 } else {
                     return -1;
                 }
             });
             color_list.Clear();
-            foreach(ColorLAB clab in order_list) {
+            foreach (ColorLAB clab in order_list) {
                 color_list.Add(clab.key);
             }
             return order_list;
@@ -501,29 +501,31 @@ namespace PixelArtist {
 
         private void 优化色彩ToolStripMenuItem_Click(object sender, EventArgs e) {
             if (ColorBoard.Count > 0 || CollectColor.Count > 0) {
-                List<Color> color_list = GetAllColor();
-                List<ColorLAB> order_list = sort_color_board_by_lab(ref color_list);
-                List<Color> new_color_list = new List<Color>();
-                //生成<颜色:间隔>表
-                List<double> gap_table = new List<double>();
-                for(int i = 0;i < order_list.Count; i++) {
-                    gap_table.Add(order_list[i].distance_to(order_list[(order_list.Count+i-1)%order_list.Count]));
-                }
-                //根据优化系数进行稀疏筛选，即根据颜色距离的间隔阈值，筛掉间隔小于阈值的颜色，使得颜色整体间隔距离趋于稀疏
-                double gap = 0;
-                for(int i = 0; i < order_list.Count; i++) {
-                    gap += gap_table[i];
-                    if(gap > optimization_index) {
-                        new_color_list.Add(order_list[i].key);
-                        gap = 0;
-                    }
-                }
-                //更新优化系数
-                double count_index = Convert.ToDouble(new_color_list.Count) / Convert.ToDouble(order_list.Count);
-                if (count_index > 0.75)
+                double count_index = 0;
+                List<Color> new_color_list = GetAllColor();
+                double color_count = new_color_list.Count;
+                do {
                     optimization_index += 5;
-                else
-                    optimization_index = 5;
+                    List<ColorLAB> order_list = sort_color_board_by_lab(ref new_color_list);
+                    new_color_list.Clear();
+                    //生成<颜色:间隔>表
+                    List<double> gap_table = new List<double>();
+                    for (int i = 0; i < order_list.Count; i++) {
+                        gap_table.Add(order_list[i].distance_to(order_list[(order_list.Count + i - 1) % order_list.Count]));
+                    }
+                    //根据优化系数进行稀疏筛选，即根据颜色距离的间隔阈值，筛掉间隔小于阈值的颜色，使得颜色整体间隔距离趋于稀疏
+                    double gap = 0;
+                    for (int i = 0; i < order_list.Count; i++) {
+                        gap += gap_table[i];
+                        if (gap > optimization_index) {
+                            new_color_list.Add(order_list[i].key);
+                            gap = 0;
+                        }
+                    }
+                    //更新优化系数
+                    count_index = Convert.ToDouble(new_color_list.Count) / color_count;
+                } while (count_index > 0.75);
+                optimization_index = 5;
                 //重新载入调色板
                 reload_color_board(ref new_color_list);
             }
@@ -531,7 +533,7 @@ namespace PixelArtist {
 
         private void pb_result_MouseMove(object sender, MouseEventArgs e) {
             if (isGetColorMode) {
-                
+
             }
         }
 
